@@ -1,0 +1,2 @@
+# Keypoint_lable_convert
+labelme生成的json格式的keypoint label，转换为YOLO-txt
