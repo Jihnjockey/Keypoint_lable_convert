@@ -32,12 +32,14 @@ def convert(file): #读取的json里骨骼关键点为2D,即无Visible,
 
 
         if shape['label'] == 'person':
-            if len(peoples) != 1:
+            if shape['group_id'] and int(shape['group_id'])> 0:
                 newarray = np.zeros((1, 39), dtype=np.float16)
                 peoples = np.concatenate((peoples, newarray))
 
             pidx=shape['group_id'] if shape['group_id'] else 0
+
             peoples[pidx][0]=0
+
 
             left=shape['points'][0][0] if shape['points'][0][0]>=0.0 else 0.0
             top = shape['points'][0][1] if shape['points'][0][1]  >= 0.0 else 0.0
@@ -73,7 +75,7 @@ def convert(file): #读取的json里骨骼关键点为2D,即无Visible,
 
 if __name__ == '__main__':
 
-    originaldir=r'D:\Bone_Joint_Identity\ultralytics-main\dataset\labels'  #要转换的json标签集
+    originaldir=r'D:\Bone_Joint_Identity\ultralytics-main\Datasets\labels'  #要转换的json标签集
     lableslist=os.listdir(originaldir)
     lableslists=tqdm(lableslist)
     for label in lableslists:
