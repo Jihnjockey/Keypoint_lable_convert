@@ -14,9 +14,10 @@ from PIL import Image
 from tqdm import tqdm
 import shutil
 
-datasets_orig_dir = r'D:\Bone_Joint_Identity\ultralytics-main\Datasets'  # 数据集原始位置，下分images和lables
+datasets_orig_dir = r'D:\Bone_Joint_Identity\JSON2YOLO-master\generated_YOLOtxt\labels'  # 数据集原始位置，下分images和lables
+imagefile_dir=r'D:\Bone_Joint_Identity\ultralytics-main\Datasets\images'
 final_dir = r'D:\Bone_Joint_Identity\ultralytics-main\20_datasets'
-label_format = 'json'
+label_format = 'txt'
 image_format = 'jpg'
 rate = 0.2  # val+test 占总数据集的比例
 
@@ -39,10 +40,10 @@ def move_imgsnlabels(mode,label_list):
     for label in pbar:
         pbar.set_description("Processing %s" % mode)
         if label.split('.')[-1]==label_format:
-            shutil.copy(os.path.join(datasets_orig_dir+'\labels',label) ,os.path.join(final_dir,'labels\\'+mode)) #复制label
+            shutil.copy(os.path.join(datasets_orig_dir,label) ,os.path.join(final_dir,'labels\\'+mode)) #复制label
             imagename= label.split('.')[0]
             try:
-                shutil.copy(os.path.join(datasets_orig_dir+'\images', imagename+'.'+image_format), os.path.join(final_dir, 'images\\'+mode)) #复制image
+                shutil.copy(os.path.join(imagefile_dir, imagename+'.'+image_format), os.path.join(final_dir, 'images\\'+mode)) #复制image
             except:
                 print("not found "+imagename)
 
@@ -62,7 +63,7 @@ if __name__ == '__main__':
         shutil.rmtree(final_dir)
         makecocofolder(final_dir)
 
-    label_list=os.listdir(datasets_orig_dir+'\labels')
+    label_list=os.listdir(datasets_orig_dir)
     total_label_nums=len(label_list)
     valtest= random.sample(label_list, int(total_label_nums*rate)*2)
     half=int(len(valtest)/2)
